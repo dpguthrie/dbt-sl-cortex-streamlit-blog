@@ -7,4 +7,10 @@ This repo contains the code used to create the streamlit in snowflake app mentio
 
 Please open up an issue here if you encounter any problems.
 
+# Architecture
+
+The diagram below shows the flows within the application.
+
+![Diagram](app_diagram.png)
+
 The inspiration for this app started [here](https://dbt-semantic-layer.streamlit.app)
