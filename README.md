@@ -1,4 +1,4 @@
-# Intro
+# Overview
 
 This repo contains the code used to create the streamlit in snowflake app mentioned in this blog post.  There are two files:
 
