@@ -1,4 +1,4 @@
-/* Grant database role snowflake.cortex_user */
+e/* Grant database role snowflake.cortex_user */
 
 use role accountadmin;
 
@@ -53,7 +53,7 @@ grant usage on secret dbt_cloud_service_token to role public;
 
 /* UDF - Retrieve Initial Metadata */
 
-create or replace function retrieve_sl_metadata()
+create or replace function retrieve_sl_metadata(host string, environment_id integer, token string default null)
     returns object
     language python
     runtime_version = 3.9
@@ -83,16 +83,16 @@ query GetMetrics($environmentId: BigInt!) {
 }
 """
 
-def main():
+def main(host: str, environment_id: int, token: str = None):
     session = requests.Session()
-    token = _snowflake.get_generic_secret_string('cred')
+    if host[-1] == '/':
+        host = host[:-1]
+    url = f'https://{host}/api/graphql'
+    if token == "":
+        token = _snowflake.get_generic_secret_string('cred')
     session.headers = {'Authorization': f'Bearer {token}'}
-
-    # TODO: Update for your environment ID
-    payload = {"query": query, "variables": {"environmentId": 1}}
-
-    # TODO: Update for your deployment type
-    response = session.post("https://semantic-layer.cloud.getdbt.com/api/graphql", json=payload)
+    payload = {"query": query, "variables": {"environmentId": environment_id}}
+    response = session.post(url, json=payload)
     response.raise_for_status()
     return response.json()
 
